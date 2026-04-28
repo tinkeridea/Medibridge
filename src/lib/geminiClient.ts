@@ -102,7 +102,7 @@ Rules:
 - If the report text or document is unclear or not a medical report, still return valid JSON with a helpful explanation`;
 
   try {
-    const promptParts: any[] = [textPrompt];
+    const promptParts: (string | { inlineData: { data: string; mimeType: string } })[] = [textPrompt];
     
     if (fileData && fileMimeType) {
       promptParts.push({
@@ -120,14 +120,15 @@ Rules:
       // Sometimes Gemini wraps JSON in markdown blocks even with responseMimeType set
       const sanitizedText = text.replace(/```json\n?|```/g, "").trim();
       parsed = JSON.parse(sanitizedText) as GeminiReportResponse;
-    } catch (parseError) {
+    } catch {
       console.error("Failed to parse Gemini response as JSON. Raw text:", text);
       throw new Error("AI returned malformed data.");
     }
     return parsed;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Unknown error";
     console.error("Gemini analyzeMedicalReport error details:", error);
-    throw new Error(`Failed to analyze report: ${error.message}`);
+    throw new Error(`Failed to analyze report: ${msg}`);
   }
 }
 
@@ -186,9 +187,10 @@ Rules:
     const text = result.response.text();
     const parsed = JSON.parse(text) as GeminiClaimResponse;
     return parsed;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Unknown error";
     console.error("Gemini estimateClaim error details:", error);
-    throw new Error(`Failed to estimate claim: ${error.message}`);
+    throw new Error(`Failed to estimate claim: ${msg}`);
   }
 }
 
@@ -254,14 +256,15 @@ Rules:
     try {
       const sanitizedText = text.replace(/```json\n?|```/g, "").trim();
       parsed = JSON.parse(sanitizedText) as HealthPredictionResponse;
-    } catch (parseError) {
+    } catch {
       console.error("Failed to parse prediction response as JSON. Raw text:", text);
       throw new Error("AI returned malformed data.");
     }
     return parsed;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Unknown error";
     console.error("Gemini generateHealthPrediction error details:", error);
-    throw new Error(`Failed to generate prediction: ${error.message}`);
+    throw new Error(`Failed to generate prediction: ${msg}`);
   }
 }
 
@@ -309,13 +312,14 @@ Rules:
     try {
       const sanitizedText = text.replace(/```json\n?|```/g, "").trim();
       parsed = JSON.parse(sanitizedText) as HospitalFinderResponse;
-    } catch (parseError) {
+    } catch {
       console.error("Failed to parse hospital response as JSON. Raw text:", text);
       throw new Error("AI returned malformed data.");
     }
     return parsed;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Unknown error";
     console.error("Gemini findNearbyHospitals error details:", error);
-    throw new Error(`Failed to find hospitals: ${error.message}`);
+    throw new Error(`Failed to find hospitals: ${msg}`);
   }
 }

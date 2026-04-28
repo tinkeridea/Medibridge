@@ -37,7 +37,7 @@ export function EmergencyQR({ slug }: EmergencyQRProps) {
       
       img.src = "data:image/svg+xml;base64," + btoa(svgData);
       toast.success("QR Code downloaded!");
-    } catch (err) {
+    } catch {
       toast.error("Failed to download QR code");
     }
   };

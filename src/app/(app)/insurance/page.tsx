@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { getPolicies, getLatestClaimEstimate } from "@/lib/firestoreHelpers";
 import { db } from "@/lib/firebase/clientApp";
-import { collection, doc, setDoc, Timestamp } from "firebase/firestore";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { nanoid } from "nanoid";
 import type { InsurancePolicy, ClaimEstimate } from "@/types";
-import { formatINR, formatTimestamp, confidenceColor, coverageStatusColor } from "@/lib/utils";
+import { formatINR, coverageStatusColor } from "@/lib/utils";
 import toast from "react-hot-toast";
-import { ShieldAlert, FileText, CheckCircle2, AlertTriangle, XCircle, Info, Calculator } from "lucide-react";
+import { ShieldAlert, AlertTriangle, Calculator } from "lucide-react";
 import { Spinner } from "@/components/ui/Spinner";
 
 export default function InsurancePage() {
@@ -78,7 +78,7 @@ export default function InsurancePage() {
       setSelectedPolicyId(id);
       setIsAddingPolicy(false);
       toast.success("Policy saved successfully!");
-    } catch (error) {
+    } catch {
       toast.error("Failed to save policy");
     } finally {
       setSavingPolicy(false);
@@ -121,8 +121,9 @@ export default function InsurancePage() {
       setLatestEstimate(data);
       toast.success("Estimate generated!");
       setBillText("");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to generate estimate");
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Failed to generate estimate";
+      toast.error(msg);
     } finally {
       setEstimating(false);
     }

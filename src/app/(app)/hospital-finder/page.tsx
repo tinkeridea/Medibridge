@@ -62,13 +62,13 @@ export default function HospitalFinderPage() {
           const cityArea = data.city || data.locality || "Unknown Area";
           setLocationStr(`${cityArea}, ${data.principalSubdivision}, ${data.countryName}`);
           toast.success("Location acquired");
-        } catch (error) {
+        } catch {
           setLocationStr(`Coordinates: ${position.coords.latitude}, ${position.coords.longitude}`);
           toast.success("Coordinates acquired");
         }
         setLocating(false);
       },
-      (error) => {
+      (_error) => {
         toast.error("Unable to retrieve your location");
         setLocating(false);
       }
@@ -100,8 +100,9 @@ export default function HospitalFinderPage() {
 
       const data = await res.json();
       setResult(data);
-    } catch (error: any) {
-      toast.error(error.message || "Something went wrong");
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Something went wrong";
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

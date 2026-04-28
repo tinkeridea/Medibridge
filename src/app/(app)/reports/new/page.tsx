@@ -89,8 +89,9 @@ export default function NewReportPage() {
       const data = await res.json();
       toast.success("Analysis complete!");
       router.push(`/reports/${data.reportId}`);
-    } catch (error: any) {
-      toast.error(error.message || "Failed to analyze report");
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Failed to analyze report";
+      toast.error(msg);
       setAnalyzing(false);
     }
   };

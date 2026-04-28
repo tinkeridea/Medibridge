@@ -21,8 +21,9 @@ export default function LoginPage() {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success("Welcome back!");
       router.push("/dashboard");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to login");
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Failed to login";
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -76,7 +77,7 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-400">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href="/signup" className="text-blue-400 hover:text-blue-300">
             Sign up
           </Link>

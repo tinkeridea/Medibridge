@@ -31,8 +31,9 @@ export default function PredictionsPage() {
       const data = await res.json();
       setPrediction(data);
       toast.success("AI Analysis Complete");
-    } catch (error: any) {
-      toast.error(error.message || "Something went wrong");
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Something went wrong";
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

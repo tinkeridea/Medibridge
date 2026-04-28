@@ -46,8 +46,6 @@ export function TrendChart({ metrics, metricName }: TrendChartProps) {
   }
 
   // Parse normal range if possible (e.g. "12.0 - 15.0" -> [12.0, 15.0])
-  let yMin = "auto";
-  let yMax = "auto";
   let hasRange = false;
   let rangeStart = 0;
   let rangeEnd = 0;
@@ -87,7 +85,7 @@ export function TrendChart({ metrics, metricName }: TrendChartProps) {
             itemStyle={{ color: "#3b82f6" }}
             labelStyle={{ color: "#94a3b8", marginBottom: "4px" }}
             cursor={{ stroke: "#1e2d4a", strokeWidth: 1, strokeDasharray: "3 3", fill: "transparent" }}
-            formatter={(value: number, name: string, props: any) => [
+            formatter={(value: number, name: string, props: { payload: { unit: string } }) => [
               `${value} ${props.payload.unit}`,
               metricName,
             ]}

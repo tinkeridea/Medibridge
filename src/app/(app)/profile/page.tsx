@@ -69,7 +69,7 @@ export default function ProfilePage() {
         id: user.uid,
       });
       toast.success("Profile saved");
-    } catch (error) {
+    } catch {
       toast.error("Failed to save profile");
     } finally {
       setSaving(false);

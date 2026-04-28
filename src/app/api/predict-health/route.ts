@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     let decodedToken;
     try {
       decodedToken = await adminAuth.verifyIdToken(token);
-    } catch (e) {
+    } catch {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
     const userId = decodedToken.uid;
@@ -40,8 +40,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json(aiResult);
 
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Internal server error";
     console.error("Prediction API error:", error);
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

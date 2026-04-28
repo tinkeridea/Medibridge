@@ -21,8 +21,8 @@ export default function PublicEmergencyCard({ params }: { params: { slug: string
           try {
             const report = await getLatestReport(data.userId);
             setLatestReport(report);
-          } catch(e) {
-            console.error("Failed to load report", e);
+          } catch {
+            console.error("Failed to load report");
           }
         } else {
           setError(true);

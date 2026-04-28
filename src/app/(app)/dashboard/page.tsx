@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { getLatestReport, getUserProfile } from "@/lib/firestoreHelpers";
 import type { Report, UserProfile } from "@/types";
-import { formatTimestamp, reportStatusBadge, truncate } from "@/lib/utils";
+import { formatTimestamp, reportStatusBadge } from "@/lib/utils";
 import { FileText, Plus, ArrowRight, UserCircle } from "lucide-react";
 import { Spinner } from "@/components/ui/Spinner";
 
@@ -104,7 +104,7 @@ export default function DashboardPage() {
                 <FileText className="h-6 w-6 text-blue-400" />
               </div>
               <p className="text-slate-400 text-sm mb-4">
-                You haven't uploaded any lab reports yet.
+                You haven&apos;t uploaded any lab reports yet.
               </p>
             </div>
           )}

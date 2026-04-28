@@ -106,7 +106,7 @@ export default function ReportsListPage() {
             <FileText className="h-12 w-12 text-slate-600 mb-4" />
             <h3 className="text-lg font-medium text-slate-300 mb-2">No reports yet</h3>
             <p className="text-slate-500 max-w-md mb-6">
-              You haven't uploaded any medical reports. Paste your first lab report to get an AI summary and start tracking your metrics.
+              You haven&apos;t uploaded any medical reports. Paste your first lab report to get an AI summary and start tracking your metrics.
             </p>
             <Link href="/reports/new" className="btn-primary">
               <Plus className="h-5 w-5" /> Analyze New Report

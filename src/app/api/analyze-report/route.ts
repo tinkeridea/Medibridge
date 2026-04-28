@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     let decodedToken;
     try {
       decodedToken = await adminAuth.verifyIdToken(token);
-    } catch (e) {
+    } catch {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
     const userId = decodedToken.uid;
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     const reportDoc: Report = {
       id: reportId,
       userId,
-      createdAt: createdAt as any, // Typed as client timestamp in shared types, but we cast
+      createdAt: createdAt as unknown as Timestamp, // admin Timestamp satisfies shared type structurally
       reportType,
       rawText: reportText || "[Document Uploaded]",
       aiSummary: aiResult.patientExplanation,
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
     batch.set(reportRef, reportDoc);
 
     // Write Metrics
-    const metricsToSave = aiResult.metrics.map(m => {
+    aiResult.metrics.forEach(m => {
       const metricId = nanoid();
       const metricDoc: HealthMetric = {
         id: metricId,
@@ -72,11 +72,10 @@ export async function POST(req: Request) {
         unit: m.unit,
         normalRange: m.normal_range,
         status: m.status,
-        date: createdAt as any,
+        date: createdAt as unknown as Timestamp,
       };
       const metricRef = adminDb.collection("health_metrics").doc(metricId);
       batch.set(metricRef, metricDoc);
-      return metricDoc;
     });
 
     await batch.commit();
@@ -90,8 +89,10 @@ export async function POST(req: Request) {
       metrics: aiResult.metrics,
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Internal server error";
+    const stack = error instanceof Error ? error.stack : undefined;
     console.error("API error details:", error);
-    return NextResponse.json({ error: error.message || "Internal server error", stack: error.stack }, { status: 500 });
+    return NextResponse.json({ error: msg, stack }, { status: 500 });
   }
 }
