@@ -27,7 +27,7 @@ export default function PublicEmergencyCard({ params }: { params: { slug: string
         } else {
           setError(true);
         }
-      } catch (e) {
+      } catch {
         setError(true);
       } finally {
         setLoading(false);

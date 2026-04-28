@@ -68,7 +68,7 @@ export default function HospitalFinderPage() {
         }
         setLocating(false);
       },
-      (_error) => {
+      () => {
         toast.error("Unable to retrieve your location");
         setLocating(false);
       }
