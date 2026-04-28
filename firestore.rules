@@ -1,0 +1,52 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is signed in
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Helper function to check if user is accessing their own data
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Users collection: users can only read and write their own document
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Emergency Profiles: anyone can read (for public QR card), only owner can write
+    match /emergency_profiles/{userId} {
+      allow read: if true; // Public access for /e/[slug] pages
+      allow write: if isOwner(userId);
+    }
+
+    // Reports: owners only
+    match /reports/{reportId} {
+      allow read: if isOwner(resource.data.userId);
+      // Writes happen via Admin SDK in API routes, but we can allow client writes too if needed.
+      allow write: if isOwner(request.resource.data.userId);
+    }
+
+    // Health Metrics: owners only
+    match /health_metrics/{metricId} {
+      allow read: if isOwner(resource.data.userId);
+      allow write: if isOwner(request.resource.data.userId);
+    }
+
+    // Insurance Policies: owners only
+    match /insurance_policies/{policyId} {
+      allow read: if isOwner(resource.data.userId);
+      allow write: if isOwner(request.resource.data.userId);
+    }
+
+    // Claim Estimates: owners only
+    match /claim_estimates/{estimateId} {
+      allow read: if isOwner(resource.data.userId);
+      // Writes usually happen via Admin SDK
+      allow write: if isOwner(request.resource.data.userId);
+    }
+  }
+}
