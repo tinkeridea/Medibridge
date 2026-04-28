@@ -1,7 +1,10 @@
 // src/types/index.ts
 // Shared TypeScript interfaces for all Firestore collections and API responses.
 
-import { Timestamp } from "firebase/firestore";
+export interface FirestoreTimestampLike {
+  seconds: number;
+  toDate(): Date;
+}
 
 // ─── Firestore Documents ────────────────────────────────────────────────────
 
@@ -19,8 +22,8 @@ export interface UserProfile {
     relation: string;
     phone: string;
   };
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: FirestoreTimestampLike;
+  updatedAt: FirestoreTimestampLike;
 }
 
 export interface EmergencyProfile {
@@ -37,14 +40,14 @@ export interface EmergencyProfile {
   };
   name: string;
   age: number | null;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: FirestoreTimestampLike;
+  updatedAt: FirestoreTimestampLike;
 }
 
 export interface Report {
   id: string;
   userId: string;
-  createdAt: Timestamp;
+  createdAt: FirestoreTimestampLike;
   reportType: string;
   rawText: string;
   aiSummary: string;
@@ -64,7 +67,7 @@ export interface HealthMetric {
   unit: string;
   normalRange: string;
   status: "low" | "normal" | "high";
-  date: Timestamp;
+  date: FirestoreTimestampLike;
 }
 
 export interface InsurancePolicy {
@@ -77,7 +80,7 @@ export interface InsurancePolicy {
   validFrom: string;
   validTo: string;
   policyText: string;
-  createdAt: Timestamp;
+  createdAt: FirestoreTimestampLike;
 }
 
 export interface ClaimEstimate {
@@ -91,7 +94,7 @@ export interface ClaimEstimate {
   coverageBreakdown: CoverageBreakdownItem[];
   plainExplanation: string;
   disclaimer: string;
-  createdAt: Timestamp;
+  createdAt: FirestoreTimestampLike;
 }
 
 export interface CoverageBreakdownItem {

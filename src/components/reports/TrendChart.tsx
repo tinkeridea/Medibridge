@@ -85,8 +85,8 @@ export function TrendChart({ metrics, metricName }: TrendChartProps) {
             itemStyle={{ color: "#3b82f6" }}
             labelStyle={{ color: "#94a3b8", marginBottom: "4px" }}
             cursor={{ stroke: "#1e2d4a", strokeWidth: 1, strokeDasharray: "3 3", fill: "transparent" }}
-            formatter={(value: number, name: string, props: { payload: { unit: string } }) => [
-              `${value} ${props.payload.unit}`,
+            formatter={(value, _name, props) => [
+              `${value} ${props?.payload?.unit ?? ""}`.trim(),
               metricName,
             ]}
           />

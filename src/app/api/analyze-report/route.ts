@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     const reportDoc: Report = {
       id: reportId,
       userId,
-      createdAt: createdAt as unknown as Timestamp, // admin Timestamp satisfies shared type structurally
+      createdAt,
       reportType,
       rawText: reportText || "[Document Uploaded]",
       aiSummary: aiResult.patientExplanation,
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
         unit: m.unit,
         normalRange: m.normal_range,
         status: m.status,
-        date: createdAt as unknown as Timestamp,
+        date: createdAt,
       };
       const metricRef = adminDb.collection("health_metrics").doc(metricId);
       batch.set(metricRef, metricDoc);

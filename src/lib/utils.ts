@@ -2,11 +2,11 @@
 // General utility functions used across the app.
 
 import { format } from "date-fns";
-import { Timestamp } from "firebase/firestore";
+import type { FirestoreTimestampLike } from "@/types";
 
 /** Convert a Firestore Timestamp to a human-readable date string */
 export function formatTimestamp(
-  ts: Timestamp | undefined | null,
+  ts: FirestoreTimestampLike | undefined | null,
   fmt = "dd MMM yyyy"
 ): string {
   if (!ts) return "—";

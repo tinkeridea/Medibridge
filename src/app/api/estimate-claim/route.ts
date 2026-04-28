@@ -46,7 +46,7 @@ export async function POST(req: Request) {
       coverageBreakdown: aiResult.coverageBreakdown,
       plainExplanation: aiResult.plainExplanation,
       disclaimer: aiResult.disclaimer,
-      createdAt: createdAt as unknown as Timestamp,
+      createdAt,
     };
 
     await adminDb.collection("claim_estimates").doc(estimateId).set(estimateDoc);
